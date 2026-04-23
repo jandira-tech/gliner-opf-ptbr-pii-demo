@@ -1,0 +1,4 @@
+gradio>=5.40
+opf @ git+https://github.com/openai/privacy-filter.git
+huggingface_hub>=0.24.0
+torch>=2.2.0
