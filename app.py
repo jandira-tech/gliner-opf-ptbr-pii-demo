@@ -1070,10 +1070,12 @@ Ranking apples-to-apples (mesma val PT-BR 5k, mesmas 24 labels canônicas, nerva
 **Contexto profissional** — `occupation`, `employment_status`, `education_level`, `company_name`, `language`
         """)
 
-_EXAMPLES_FULL_TEXT = [ex[0] for ex in EXAMPLES]
-_HEAD_HTML = f"""
+    # Inject expansion script as a child HTML component — Gradio 5.40's
+    # Blocks.launch() does not accept a `head` kwarg, but a rendered <script>
+    # tag works identically (MutationObserver boots once the DOM is parsed).
+    gr.HTML(f"""
 <script>
-window.__OPF_EXAMPLES__ = {json.dumps(_EXAMPLES_FULL_TEXT, ensure_ascii=False)};
+window.__OPF_EXAMPLES__ = {json.dumps([ex[0] for ex in EXAMPLES], ensure_ascii=False)};
 (function() {{
   // Gradio's svelte Example component truncates text to 60 chars client-side.
   // Re-expand each cell by prefix-matching the full text we shipped above.
@@ -1115,7 +1117,8 @@ window.__OPF_EXAMPLES__ = {json.dumps(_EXAMPLES_FULL_TEXT, ensure_ascii=False)};
   }}
 }})();
 </script>
-"""
+""")
+
 
 if __name__ == "__main__":
-    demo.queue(max_size=10).launch(head=_HEAD_HTML)
+    demo.queue(max_size=10).launch()
