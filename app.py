@@ -1034,7 +1034,7 @@ Ranking apples-to-apples (mesma val PT-BR 5k, mesmas 24 labels canônicas, nerva
 
 | Item | Detalhe |
 |---|---|
-| Modelo | `arthrod/gliner-opf-ptbr-pii-v1` (privado) |
+| Modelo | [`arthrod/gliner-opf-ptbr-pii-v1`](https://huggingface.co/arthrod/gliner-opf-ptbr-pii-v1) |
 | Backbone | openai/privacy-filter (8L sparse-MoE, 128 experts, top-4 routing) |
 | Treino | 9-round chunked sweep (3 ép × 3 saves), 914 mil linhas, ~3h45m em MI300X |
 | Decoder | Viterbi constrained (BIESO) |

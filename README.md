@@ -9,9 +9,18 @@ app_file: app.py
 pinned: false
 short_description: PII em PT-BR — openai/privacy-filter fine-tune
 hf_oauth: false
+license: apache-2.0
+models:
+- arthrod/gliner-opf-ptbr-pii-v1
+datasets:
+- arthrod/gliner-opf-ptbr-pii-bench-v1
 ---
 
 # OPF PT-BR PII Detector
+
+Finds personal and LGPD-sensitive data in Brazilian Portuguese text. It runs a fine-tune of OpenAI
+Privacy Filter (not a GLiNER model, despite the repo name), trained and evaluated on synthetic data;
+the benchmark and its limitations are in [the dataset card](https://huggingface.co/datasets/arthrod/gliner-opf-ptbr-pii-bench-v1).
 
 Fine-tune do [openai/privacy-filter](https://github.com/openai/privacy-filter) treinado em **914 mil amostras** de PII em português brasileiro (texto natural autêntico das fontes upstream). 73 labels (24 PT-BR canônicos + 47 cross-source multilíngua).
 
