@@ -43,3 +43,17 @@ Fine-tune do [openai/privacy-filter](https://github.com/openai/privacy-filter) t
 | ettin-32m | 0.808 | 0.769 |
 
 Dados completos no [model card](https://huggingface.co/arthrod/gliner-opf-ptbr-pii-v1).
+
+## Related repos
+
+| Repo | Type | Role |
+|---|---|---|
+| [arthrod/gliner-ettin-32m-ptbr-pii-full-3x-v1](https://huggingface.co/arthrod/gliner-ettin-32m-ptbr-pii-full-3x-v1) | model | GLiNER on `jhu-clsp/ettin-encoder-32m`, full ~984k-row train set, 69,000 steps. Smallest model in the family. |
+| [arthrod/gliner-ettin-68m-ptbr-pii-full-3x-v1](https://huggingface.co/arthrod/gliner-ettin-68m-ptbr-pii-full-3x-v1) | model | GLiNER on `jhu-clsp/ettin-encoder-68m`, full ~984k-row train set, 69,000 steps (trainer state uploaded through step 58,650). |
+| [arthrod/gliner-ettin-68m-ptbr-pii-top50k-v1](https://huggingface.co/arthrod/gliner-ettin-68m-ptbr-pii-top50k-v1) | model | GLiNER on `jhu-clsp/ettin-encoder-68m`, 50k curated subset, 11,700 steps. Ablation: shows the curated subset under-generalizes. |
+| [arthrod/gliner-mmbert-small-ptbr-pii-full-3x-v1](https://huggingface.co/arthrod/gliner-mmbert-small-ptbr-pii-full-3x-v1) | model | GLiNER on `jhu-clsp/mmBERT-small`, full train set + 2k Ritápolis rows, 69,000 steps. Strongest GLiNER model of the family. |
+| [arthrod/gliner-opf-ptbr-pii-v1](https://huggingface.co/arthrod/gliner-opf-ptbr-pii-v1) | model | Fine-tune of OpenAI Privacy Filter (not GLiNER despite the name). Best partial F1 on the in-distribution val set and by far the fewest false positives on no-PII text. |
+| [arthrod/gliner-opf-ptbr-pii-bench-v1](https://huggingface.co/datasets/arthrod/gliner-opf-ptbr-pii-bench-v1) | dataset | Benchmark: predictions and metrics for the mmBERT-small and Privacy Filter models (plus two unreleased ettin variants) on the PT-BR val set, held-out sources and no-PII spam/phishing text. |
+| **arthrod/gliner-opf-ptbr-pii-demo** (this repo) | space | Gradio demo running the Privacy Filter fine-tune. |
+| [arthrod/gliner_eval_folder](https://huggingface.co/datasets/arthrod/gliner_eval_folder) | dataset | Earlier (Feb 2026) sweep: 18 GLiNER models x 9 eval sets. |
+| [arthrod/gliner_review_comparison](https://huggingface.co/datasets/arthrod/gliner_review_comparison) | dataset | Earlier GLiNER PII review/comparison data. |
