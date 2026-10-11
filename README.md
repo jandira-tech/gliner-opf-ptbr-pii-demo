@@ -55,5 +55,5 @@ Dados completos no [model card](https://huggingface.co/arthrod/gliner-opf-ptbr-p
 | [arthrod/gliner-opf-ptbr-pii-v1](https://huggingface.co/arthrod/gliner-opf-ptbr-pii-v1) | model | Fine-tune of OpenAI Privacy Filter (not GLiNER despite the name). Best partial F1 on the in-distribution val set and by far the fewest false positives on no-PII text. |
 | [arthrod/gliner-opf-ptbr-pii-bench-v1](https://huggingface.co/datasets/arthrod/gliner-opf-ptbr-pii-bench-v1) | dataset | Benchmark: predictions and metrics for the mmBERT-small and Privacy Filter models (plus two unreleased ettin variants) on the PT-BR val set, held-out sources and no-PII spam/phishing text. |
 | **arthrod/gliner-opf-ptbr-pii-demo** (this repo) | space | Gradio demo running the Privacy Filter fine-tune. |
-| [arthrod/gliner_eval_folder](https://huggingface.co/datasets/arthrod/gliner_eval_folder) | dataset | Earlier (Feb 2026) sweep: 18 GLiNER models x 9 eval sets. |
+| `arthrod/gliner_eval_folder` (private) | dataset | Earlier (Feb 2026) sweep: 18 GLiNER models x 9 eval sets. |
 | [arthrod/gliner_review_comparison](https://huggingface.co/datasets/arthrod/gliner_review_comparison) | dataset | Earlier GLiNER PII review/comparison data. |
