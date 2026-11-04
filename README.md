@@ -57,3 +57,20 @@ Dados completos no [model card](https://huggingface.co/arthrod/gliner-opf-ptbr-p
 | **arthrod/gliner-opf-ptbr-pii-demo** (this repo) | space | Gradio demo running the Privacy Filter fine-tune. |
 | `arthrod/gliner_eval_folder` (private) | dataset | Earlier (Feb 2026) sweep: 18 GLiNER models x 9 eval sets. |
 | [arthrod/gliner_review_comparison](https://huggingface.co/datasets/arthrod/gliner_review_comparison) | dataset | Earlier GLiNER PII review/comparison data. |
+
+## Run locally
+
+A compatible CUDA GPU, Python and access to the model are required. The Space uses `spaces.GPU`, downloads the model at startup and initializes the OPF runtime on CUDA; execution outside ZeroGPU may require changes to the GPU environment.
+
+```sh
+git clone https://github.com/jandira-tech/gliner-opf-ptbr-pii-demo.git
+cd gliner-opf-ptbr-pii-demo
+pip install -r requirements.txt
+python app.py
+```
+
+Enter text, select the labels to consider, and select **Analisar texto**. An empty label selection means all available labels. The current overlap checkbox is reported in the summary; overlapping spans cannot all be painted in Gradio's highlighted-text component. The model and dataset cards describe the evaluation and its limits.
+
+## Privacy and responsible use
+
+Text entered into the demo is processed by the hosted Space and model. Avoid confidential or real personal data unless you have assessed the infrastructure, access controls and applicable policies. Detection is imperfect: false negatives and incorrect labels are possible. Review results before using them for redaction or other decisions; benchmark scores do not guarantee performance on other text.
