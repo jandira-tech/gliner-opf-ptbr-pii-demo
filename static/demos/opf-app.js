@@ -201,6 +201,15 @@
     $("#summeta").textContent = "";
   }
 
+  let revision = 0;
+  function markStale() {
+    revision++;
+    state.ran = false;
+    state.result = null;
+    idle();
+    $("#runmeta").textContent = "Parâmetros alterados · analise novamente";
+  }
+
   async function run() {
     if (state.busy) return;
     const text = $("#txt").value;
@@ -209,6 +218,7 @@
       $("#txt").focus();
       return;
     }
+    const requestRevision = ++revision;
     setBusy(true);
     try {
       const res = await fetch("/gradio_api/call/analyze", {
@@ -232,7 +242,7 @@
         start: points.slice(0, span.start).join("").length,
         end: points.slice(0, span.end).join("").length
       }));
-      if (text !== $("#txt").value) { toast("Texto alterado; analise novamente"); return; }
+      if (requestRevision !== revision || text !== $("#txt").value) { toast("Entrada alterada; analise novamente"); return; }
       state.result = data;
       state.ran = true;
       paint(data);
@@ -364,7 +374,7 @@
         ls.forEach((l) => (allOn ? state.labels.delete(l) : state.labels.add(l)));
       }
       drawLabels();
-      if (state.ran) run();
+      markStale();
     });
 
     $("#scope").addEventListener("click", (e) => {
@@ -374,7 +384,7 @@
       state.labels = new Set(state.scope === "all" ? ALL : PTBR24);
       drawLabels();
       syncScopeButtons();
-      if (state.ran) run();
+      markStale();
     });
 
     $("#view").addEventListener("click", (e) => {
@@ -382,20 +392,22 @@
       if (!b) return;
       state.view = b.dataset.v;
       syncScopeButtons();
-      if (state.ran) run();
+      if (state.result) paint(state.result);
     });
 
     $("#overlap").addEventListener("change", () => {
-      if (state.ran) run();
+      markStale();
     });
 
     $("#examples").addEventListener("click", (e) => {
       const b = e.target.closest("[data-ex]");
       if (!b) return;
+      markStale();
       if (loadEx(b.dataset.ex)) run();
     });
 
     $("#txt").addEventListener("input", () => {
+      markStale();
       count();
       if (state.ex && $("#txt").value !== state.ex.text) {
         state.ex = null;
@@ -404,6 +416,7 @@
     });
 
     $("#clear").addEventListener("click", () => {
+      revision++;
       $("#txt").value = "";
       state.ex = null;
       state.ran = false;
@@ -423,8 +436,8 @@
         return;
       }
       const text = state.result.redacted_text || "";
-      if (navigator.clipboard) navigator.clipboard.writeText(text);
-      toast("Texto redigido copiado");
+      if (!navigator.clipboard) { toast("Área de transferência indisponível"); return; }
+      navigator.clipboard.writeText(text).then(() => toast("Texto redigido copiado"), () => toast("Não foi possível copiar"));
     });
 
     idle();
