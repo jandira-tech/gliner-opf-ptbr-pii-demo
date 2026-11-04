@@ -53,6 +53,8 @@
 .skip:focus{left:8px;top:8px}
 :focus-visible{outline:2px solid var(--ink);outline-offset:2px}
 @media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+@media(max-width:720px){.nav{gap:8px}.brand{font-size:10px;min-width:0;overflow-wrap:anywhere}.nav-links{flex-shrink:0}.nav-links a{font-size:9px}.bench{grid-template-columns:minmax(0,1fr)}.col,.panel,.pb{min-width:0}.panel{overflow-x:auto}.seg{flex-wrap:wrap}}
+.examples-disclosure summary{cursor:pointer;font-family:var(--mono);font-size:12px;font-weight:600;padding:8px 0}.examples-disclosure .ex-groups{margin-top:12px}
 </style>
 </head>
 <body>
@@ -74,7 +76,7 @@
     <div class="ph"><span class="sec-label"><span class="sq"></span>Texto para análise</span><span class="mono muted" style="font-size:10.5px;font-weight:500" id="chars">0 caracteres</span></div>
     <div class="pb" style="display:flex;flex-direction:column;gap:14px">
       <textarea id="txt" class="ta" aria-label="Texto para análise" placeholder="Cole aqui o trecho a ser revisado — peça processual, contrato, e-mail, relatório…" spellcheck="false"></textarea>
-      <div class="ex-groups" id="examples"></div>
+      <details class="examples-disclosure"><summary>Escolher um exemplo →</summary><div class="ex-groups" id="examples"></div></details>
       <div class="actions"><button type="button" class="btn btn-primary" id="run">Analisar texto <span class="arr">→</span></button><button type="button" class="btn" id="clear">Limpar</button><span class="meta" id="runmeta">Exemplos construídos manualmente · fora do conjunto de treino</span></div>
     </div>
   </div>
@@ -104,7 +106,7 @@
   </div>
   <div class="panel rise d3">
     <div class="ph"><span class="sec-label"><span class="sq"></span>Placeholders</span></div>
-    <div class="pb"><p style="font-size:13.5px;color:var(--ink-body)">Cada span recebe um placeholder numerado e estável — <span class="code">[CPF_1]</span>, <span class="code">[NOME_2]</span> — para que a mesma pessoa continue rastreável no documento redigido sem expor o dado.</p></div>
+    <div class="pb"><p style="font-size:13.5px;color:var(--ink-body)">Cada span recebe um placeholder numerado e estável — <span class="code">[CPF_1]</span>, <span class="code">[NOME_2]</span> — para distinguir substituições no texto redigido; ocorrências repetidas não são vinculadas automaticamente.</p></div>
   </div>
 </aside>
 </main>
