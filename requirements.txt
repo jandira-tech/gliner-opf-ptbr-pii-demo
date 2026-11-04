@@ -1,4 +1,6 @@
-gradio>=5.40
+gradio==6.13.0
+fastapi>=0.110
+uvicorn>=0.29
 opf @ git+https://github.com/openai/privacy-filter.git
 huggingface_hub>=0.24.0
 torch>=2.2.0

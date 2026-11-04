@@ -1,0 +1,131 @@
+/* ============================================================
+   ARTHUR SOUZA RODRIGUES — Colors & Type
+   The full token system. Import AFTER fonts.css.
+
+       @import url("fonts.css");
+       @import url("colors_and_type.css");
+
+   Design DNA: warm off-white paper, single near-black ink, ONE
+   highlighter-yellow accent used as a MARK (background fill), hairline
+   borders, monospace uppercase labels. No rounded corners. No soft
+   shadows — the only shadow is a hard offset block in the accent on hover.
+   ============================================================ */
+
+:root{
+  /* ---------- CORE PALETTE (the whole system is 5 values) ---------- */
+  --bg:        #FAFAF8;   /* warm off-white "paper" — the page */
+  --ink:       #0A0A0A;   /* single near-black — text, borders, dark surfaces */
+  --muted:     #6B6B6B;   /* secondary text — passes AA on --bg (~5.3:1) */
+  --faint:     #E8E8E5;   /* hairlines / dividers — the canonical border tint */
+  --surface:   #FFFFFF;   /* raised cards sit slightly brighter than paper */
+
+  /* ---------- THE ACCENT (a highlighter, not a button color) ---------- */
+  --mark:        #FFD400; /* highlighter yellow — a BACKGROUND/MARK fill */
+  --mark-text:   #0A0A0A; /* legible ink sitting ON the accent fill */
+  --mark-on-dark:#FFD400; /* accent as a mark/arrow on dark surfaces */
+
+  /* ---------- ALTERNATE ACCENTS (swap --mark; keep one at a time) ---------- */
+  --accent-yellow: #FFD400;  /* canonical */
+  --accent-blue:   #00274C;  /* Michigan Blue — nod to the JD/LLM */
+  --accent-orange: #FF5C00;  /* Signal Orange */
+  --accent-green:  #1F8A5B;  /* Field Green — also the "available" status dot */
+  --accent-cobalt: #2A6FDB;  /* Cobalt */
+
+  /* ---------- BODY-COPY INK SHADES (on light) ---------- */
+  --ink-prose:  #1E1E1E;  /* long-form body copy */
+  --ink-soft:   #2A2A2A;  /* lede / intro paragraphs */
+  --ink-body:   #333333;  /* card & feature paragraphs */
+
+  /* ---------- INK ON DARK SURFACES (contact / footer) ---------- */
+  --on-dark:       #FAFAF8; /* primary text on --ink */
+  --on-dark-muted: #C9C9C4; /* secondary text on --ink */
+  --on-dark-faint: #9A9A96; /* labels / meta on --ink */
+  --on-dark-dim:   #8C8C88; /* footer body */
+  --on-dark-line:  #222222; /* hairlines on --ink */
+
+  /* ---------- TYPE FAMILIES ---------- */
+  --ff:    "Libre Franklin", system-ui, -apple-system, sans-serif;     /* @kind font */ /* body + display */
+  --mono:  "Roboto Mono", "Departure Mono", "Space Mono", ui-monospace, monospace; /* @kind font */ /* labels, code, wordmark */
+  --serif: "Newsreader", Georgia, "Times New Roman", serif;            /* @kind font */ /* optional editorial display */
+  --brand-font:   var(--mono);  /* wordmark face (Match-mono — the project mono) */
+
+  /* ---------- WEIGHTS (canonical) ---------- */
+  --brand-weight:   700;
+  --display-weight: 700;  /* headlines run BOLD — Libre Franklin at full weight */
+  --mono-weight:    600;  /* mono labels set semibold */
+
+  /* ---------- TYPE SCALE (fluid) ---------- */
+  --fs-display: clamp(36px, 6vw, 68px);   /* @kind font */ /* project / page H1 */
+  --fs-h1:      clamp(34px, 5.4vw, 60px); /* @kind font */ /* hero H1 */
+  --fs-h2:      clamp(26px, 3.4vw, 40px); /* @kind font */ /* section / contact H2 */
+  --fs-h3:      clamp(24px, 2.6vw, 32px); /* @kind font */ /* feature card title */
+  --fs-title:   21px;                     /* @kind font */ /* offer / card title */
+  --fs-lede:    clamp(17px, 1.7vw, 21px); /* @kind font */ /* intro paragraph */
+  --fs-body:    17px;                      /* @kind font */ /* base body */
+  --fs-sm:      15px;                      /* @kind font */ /* card body */
+  --fs-xs:      14px;                      /* @kind font */ /* dense card body */
+  --fs-label:   12px;                      /* @kind font */ /* mono section labels */
+  --fs-micro:   10.5px;                    /* @kind font */ /* mono eyebrows / dt */
+
+  /* ---------- SPACING & LAYOUT ---------- */
+  --page-max: 1180px;             /* @kind spacing */ /* content max-width */
+  --px: clamp(20px, 5vw, 56px);   /* @kind spacing */ /* horizontal page gutter */
+  --space-scale: 0.74;            /* @kind other */ /* unitless density multiplier (Compact .74 / Comfy 1 / Spacious 1.28) */
+
+  /* ---------- BORDERS & RADII ---------- */
+  --border-ink:   1px solid var(--ink);    /* @kind other */ /* the structural border — cards, panels */
+  --border-faint: 1px solid var(--faint);  /* @kind other */ /* dividers, hairlines, soft cards */
+  --radius: 0px;                            /* THE SYSTEM IS SQUARE. corners are sharp. */
+
+  /* ---------- THE ONE SHADOW (hard offset block, on hover) ---------- */
+  --lift: 7px 7px 0 var(--mark);   /* card hover */
+  --lift-sm: 6px 6px 0 var(--mark);/* nav-card hover */
+
+  /* ---------- MOTION ---------- */
+  --ease: cubic-bezier(.2,.7,.2,1); /* @kind other */ /* shared easing curve */
+  --t-fast: .18s ease;              /* @kind other */ /* fast transition */
+  --t-mid:  .25s ease;              /* @kind other */ /* mid transition */
+}
+
+/* ============================================================
+   SEMANTIC ELEMENT STYLES
+   Apply by tagging elements with these classes, or copy the rules.
+   ============================================================ */
+
+.ds-bg   { background: var(--bg); color: var(--ink); }
+
+/* --- Display & headings --- */
+.ds-h1{ font-family:var(--ff); font-weight:var(--display-weight); font-size:var(--fs-h1);
+  line-height:1.05; letter-spacing:-0.025em; }
+.ds-h2{ font-family:var(--ff); font-weight:500; font-size:var(--fs-h2);
+  line-height:1.12; letter-spacing:-0.02em; }
+.ds-h3{ font-family:var(--ff); font-weight:600; font-size:var(--fs-h3);
+  line-height:1.1; letter-spacing:-0.025em; }
+
+/* --- Body copy --- */
+.ds-lede{ font-size:var(--fs-lede); line-height:1.55; color:var(--ink-soft); }
+.ds-p{ font-size:var(--fs-body); line-height:1.6; color:var(--ink-prose); }
+.ds-small{ font-size:var(--fs-sm); line-height:1.55; color:var(--ink-body); }
+
+/* --- Mono label / eyebrow / section header --- */
+.ds-mono,.ds-eyebrow,.ds-label{
+  font-family:var(--mono); font-weight:var(--mono-weight);
+  letter-spacing:0.08em; text-transform:uppercase; color:var(--muted);
+}
+.ds-eyebrow{ font-size:var(--fs-label); }
+.ds-label{ font-size:var(--fs-micro); letter-spacing:0.1em; }
+
+/* --- The highlighter MARK — the signature move --- */
+.ds-mark{
+  background-image:linear-gradient(var(--mark),var(--mark));
+  background-repeat:no-repeat; background-size:100% 0.78em; background-position:0 62%;
+  color:var(--mark-text); padding:0 0.1em;
+  -webkit-box-decoration-break:clone; box-decoration-break:clone;
+}
+
+/* --- Inline code --- */
+.ds-code{ font-family:var(--mono); font-weight:var(--mono-weight); font-size:0.92em;
+  background:var(--faint); color:var(--ink); padding:0.1em 0.4em; }
+
+/* --- Selection echoes the accent --- */
+::selection{ background:var(--mark); color:var(--mark-text); }

@@ -1,0 +1,8 @@
+/* ============================================================
+   ARTHUR SOUZA RODRIGUES — Design System entry point.
+   Link THIS file; it pulls in the whole system in order.
+
+       <link rel="stylesheet" href="styles.css">
+   ============================================================ */
+@import url("fonts.css");
+@import url("colors_and_type.css");

@@ -1,0 +1,46 @@
+/* ============================================================
+   ARTHUR SOUZA RODRIGUES — Self-hosted webfonts
+   Latin subset (U+0000–00FF) extracted from the source build.
+   For full Unicode coverage, load the families from Google Fonts.
+
+   CANONICAL PRIMARIES (current build):
+     • Libre Franklin — body + display (variable, 100–900)
+     • Roboto Mono    — labels, wordmark, code (variable, 100–700)
+   The faces below them (Manrope, Departure Mono, Space Mono,
+   Space Grotesk, Newsreader) are retained as the Tweaks-panel
+   ALTERNATES — swap-in faces, no longer the defaults.
+   ============================================================ */
+
+/* ---- Libre Franklin — body / display (canonical sans, variable) ---- */
+@font-face{font-family:'Libre Franklin';font-style:normal;font-weight:100 900;font-display:swap;src:url("fonts/libre-franklin.woff2") format('woff2');}
+
+/* ---- Roboto Mono — canonical project mono: labels, wordmark, code (variable) ---- */
+@font-face{font-family:'Roboto Mono';font-style:normal;font-weight:100 700;font-display:swap;src:url("fonts/roboto-mono.woff2") format('woff2');}
+
+/* ============================================================
+   ALTERNATES (Tweaks-panel swap-in faces) — not the defaults
+   ============================================================ */
+
+/* ---- Manrope — alt body / display sans ---- */
+@font-face{font-family:'Manrope';font-style:normal;font-weight:400;font-display:swap;src:url("fonts/manrope-400.woff2") format('woff2');}
+@font-face{font-family:'Manrope';font-style:normal;font-weight:500;font-display:swap;src:url("fonts/manrope-500.woff2") format('woff2');}
+@font-face{font-family:'Manrope';font-style:normal;font-weight:600;font-display:swap;src:url("fonts/manrope-600.woff2") format('woff2');}
+@font-face{font-family:'Manrope';font-style:normal;font-weight:700;font-display:swap;src:url("fonts/manrope-700.woff2") format('woff2');}
+
+/* ---- Departure Mono — alt mono (pixel-grid; was the prior canonical) ---- */
+@font-face{font-family:'Departure Mono';font-style:normal;font-weight:400;font-display:swap;src:url("fonts/departure-mono-400.woff2") format('woff2');}
+
+/* ---- Space Mono — mono fallback / alt ---- */
+@font-face{font-family:'Space Mono';font-style:normal;font-weight:400;font-display:swap;src:url("fonts/space-mono-400.woff2") format('woff2');}
+@font-face{font-family:'Space Mono';font-style:normal;font-weight:700;font-display:swap;src:url("fonts/space-mono-700.woff2") format('woff2');}
+
+/* ---- Space Grotesk — alt display sans (tweakable) ---- */
+@font-face{font-family:'Space Grotesk';font-style:normal;font-weight:400;font-display:swap;src:url("fonts/space-grotesk-400.woff2") format('woff2');}
+@font-face{font-family:'Space Grotesk';font-style:normal;font-weight:500;font-display:swap;src:url("fonts/space-grotesk-500.woff2") format('woff2');}
+@font-face{font-family:'Space Grotesk';font-style:normal;font-weight:600;font-display:swap;src:url("fonts/space-grotesk-600.woff2") format('woff2');}
+@font-face{font-family:'Space Grotesk';font-style:normal;font-weight:700;font-display:swap;src:url("fonts/space-grotesk-700.woff2") format('woff2');}
+
+/* ---- Newsreader — serif option (tweakable display face) ---- */
+@font-face{font-family:'Newsreader';font-style:normal;font-weight:400;font-display:swap;src:url("fonts/newsreader-400.woff2") format('woff2');}
+@font-face{font-family:'Newsreader';font-style:normal;font-weight:500;font-display:swap;src:url("fonts/newsreader-500.woff2") format('woff2');}
+@font-face{font-family:'Newsreader';font-style:normal;font-weight:600;font-display:swap;src:url("fonts/newsreader-600.woff2") format('woff2');}

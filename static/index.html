@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>OPF PT-BR — Identificação e redação de PII</title>
+<link rel="stylesheet" href="/assets/styles.css">
+<link rel="stylesheet" href="/assets/demos/shared.css">
+<style>
+.bench{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(300px,0.9fr);gap:18px;align-items:start}
+@media(max-width:900px){.bench{grid-template-columns:1fr}}
+.col{display:flex;flex-direction:column;gap:18px}
+.ex-row{display:grid;grid-template-columns:92px 1fr;gap:10px;align-items:start}
+.ex-row .g{font-family:var(--mono);font-weight:600;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);padding-top:7px}
+.ex-row .chip{font-family:var(--ff);font-weight:500;font-size:13px;letter-spacing:-0.01em;padding:6px 10px}
+.ex-groups{display:flex;flex-direction:column;gap:10px}
+.actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.actions .meta{font-family:var(--mono);font-weight:500;font-size:11px;color:var(--muted);letter-spacing:0.02em;margin-left:auto}
+.anno{font-size:16px;line-height:2;white-space:pre-wrap;word-break:break-word;padding:20px 22px;color:var(--ink-prose)}
+.ent{display:inline;padding:1px 2px;background:var(--mark);color:var(--mark-text);-webkit-box-decoration-break:clone;box-decoration-break:clone;cursor:help}
+.ent .lb{font-family:var(--mono);font-weight:600;font-size:9px;letter-spacing:0.06em;text-transform:uppercase;margin-left:5px;padding:1px 4px;background:var(--ink);color:var(--bg);vertical-align:1px;white-space:nowrap}
+.ent.cat-sens{background:var(--ink);color:var(--bg)}.ent.cat-sens .lb{background:var(--mark);color:var(--mark-text)}
+.ent.cat-prof,.ent.cat-cred,.ent.cat-custom{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.ent.cat-prof .lb,.ent.cat-cred .lb,.ent.cat-custom .lb{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.ent.red{font-family:var(--mono);font-weight:600;font-size:12.5px;letter-spacing:0.02em;background:var(--ink);color:var(--mark-on-dark);padding:2px 6px;margin:0 1px}
+.ent.red.cat-sens{background:var(--mark);color:var(--mark-text)}
+.legend{display:flex;flex-wrap:wrap;gap:8px 18px;padding:10px 16px;border-top:1px solid var(--faint);font-family:var(--mono);font-weight:500;font-size:10.5px;letter-spacing:0.04em;text-transform:uppercase;color:var(--muted)}
+.legend span i{display:inline-block;width:12px;height:12px;vertical-align:-2px;margin-right:7px;background:var(--mark)}
+.legend .s i{background:var(--ink)}.legend .c i{background:transparent;box-shadow:inset 0 0 0 1px var(--ink)}
+.risk{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:1px;background:var(--ink);border-bottom:1px solid var(--ink)}
+.risk div{background:var(--surface);padding:14px 16px}.risk div.hot{background:var(--mark)}
+.risk b{display:block;font-size:28px;font-weight:700;letter-spacing:-0.03em;line-height:1}
+.risk small{display:block;font-family:var(--mono);font-weight:600;font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-top:8px}
+.risk div.hot small{color:var(--mark-text)}
+.note{padding:12px 16px;font-size:13.5px;color:var(--ink-body);border-bottom:1px solid var(--faint);line-height:1.5}
+.cath{display:flex;align-items:center;gap:10px;padding:14px 16px 8px;font-weight:600;font-size:15px}
+.cath .n{font-family:var(--mono);font-weight:600;font-size:11px;color:var(--muted);margin-left:auto}
+.cath .sq{width:9px;height:9px;background:var(--mark);flex:none}.cath.sens .sq{background:var(--ink)}.cath.prof .sq,.cath.cred .sq{background:transparent;box-shadow:inset 0 0 0 1px var(--ink)}
+.labgrp{display:flex;flex-direction:column;gap:6px}
+.labgrp .gh{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-weight:600;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted)}
+.labgrp .gh button{margin-left:auto;font-family:var(--mono);font-weight:600;font-size:10px;letter-spacing:0.06em;text-transform:uppercase;border:none;background:transparent;color:var(--muted);cursor:pointer;padding:0}
+.labgrp .gh button:hover{color:var(--ink);background:var(--mark)}
+.labgrp .gh .sq{width:7px;height:7px;background:var(--mark)}.labgrp.sens .gh .sq{background:var(--ink)}.labgrp.prof .gh .sq,.labgrp.cred .gh .sq{background:transparent;box-shadow:inset 0 0 0 1px var(--ink)}
+.chip.x{border-color:var(--muted);color:var(--muted)}
+.ctl{display:flex;flex-direction:column;gap:10px}.ctl+.ctl{border-top:1px solid var(--faint);padding-top:14px}
+.perf{display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,4vw,56px);padding-block:calc(clamp(44px,6vw,72px)*var(--space-scale))}
+@media(max-width:820px){.perf{grid-template-columns:1fr}}
+.perf p{font-size:15px;color:var(--ink-body);max-width:52ch;margin-top:14px}
+.perf h2{font-size:clamp(24px,3vw,34px);font-weight:700;letter-spacing:-0.025em;line-height:1.1;margin-top:18px;max-width:18ch}
+.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);background:var(--ink);color:var(--bg);font-family:var(--mono);font-weight:600;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;padding:10px 16px;opacity:0;pointer-events:none;transition:opacity var(--t-fast),transform var(--t-fast)}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.skip{position:absolute;left:-9999px;top:0;background:var(--ink);color:var(--bg);font-family:var(--mono);font-size:11px;padding:10px 14px;z-index:99}
+.skip:focus{left:8px;top:8px}
+:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<a class="skip" href="#txt">Pular para o campo de texto</a>
+<header class="hdr"><div class="wrap nav">
+<a class="brand" href="#">ARTHUR<span class="dot">.</span>SOUZA<span class="dot">.</span>RODRIGUES <span class="dot">/</span> <span class="proj">OPF·PT-BR</span></a>
+<nav class="nav-links"><a href="#bench" class="is-current">Demo</a><a href="#perf">Desempenho</a><a href="#recipe">Recipe</a><a href="https://huggingface.co/arthrod/gliner-opf-ptbr-pii-v1" class="keep" rel="noopener" target="_blank">Hugging Face →</a></nav>
+</div></header>
+
+<section class="hero wrap">
+<p class="eyebrow rise">/ OPF<span class="sep">·</span>openai/privacy-filter<span class="sep">·</span>914 mil amostras PT-BR<span class="sep">·</span><span id="labtotal">71 rótulos</span></p>
+<h1 class="h rise d1">Encontra o dado pessoal e já entrega o <span class="mark">texto redigido</span>.</h1>
+<p class="lede rise d2">Fine-tune do openai/privacy-filter em 914 mil amostras em português brasileiro. Além do rótulo, o decoder Viterbi com restrições BIESO emite um placeholder pronto para substituição — o texto recebe substituições que precisam ser revisadas.</p>
+</section>
+
+<main id="bench" class="wrap bench">
+<div class="col">
+  <div class="panel rise d2">
+    <div class="ph"><span class="sec-label"><span class="sq"></span>Texto para análise</span><span class="mono muted" style="font-size:10.5px;font-weight:500" id="chars">0 caracteres</span></div>
+    <div class="pb" style="display:flex;flex-direction:column;gap:14px">
+      <textarea id="txt" class="ta" aria-label="Texto para análise" placeholder="Cole aqui o trecho a ser revisado — peça processual, contrato, e-mail, relatório…" spellcheck="false"></textarea>
+      <div class="ex-groups" id="examples"></div>
+      <div class="actions"><button type="button" class="btn btn-primary" id="run">Analisar texto <span class="arr">→</span></button><button type="button" class="btn" id="clear">Limpar</button><span class="meta" id="runmeta">Exemplos construídos manualmente · fora do conjunto de treino</span></div>
+    </div>
+  </div>
+
+  <div class="panel rise d3" id="out">
+    <div class="ph"><span class="sec-label"><span class="sq"></span>Resultado</span>
+      <div class="actions" style="gap:10px"><div class="seg" id="view"><button type="button" aria-pressed="true" data-v="annotate">Anotado</button><button type="button" aria-pressed="false" data-v="redact">Redigido</button></div><button type="button" class="btn btn-sm" id="copy" aria-label="Copiar o texto redigido">Copiar texto redigido</button></div></div>
+    <div id="anno" class="anno" role="region" aria-label="Resultado da análise" aria-live="polite" aria-busy="false"></div>
+    <div class="legend" id="legend"><span><i></i>PII identificável</span><span class="s"><i></i>Dado sensível · art. 5º, II</span><span class="c"><i></i>Contexto / credencial</span></div>
+  </div>
+
+  <div class="panel rise d4">
+    <div class="ph"><span class="sec-label"><span class="sq"></span>Detalhamento por categoria</span><span class="mono muted" style="font-size:10.5px;font-weight:500" id="summeta"></span></div>
+    <div id="summary"></div>
+  </div>
+</div>
+
+<aside class="col">
+  <div class="panel rise d2">
+    <div class="ph"><span class="sec-label"><span class="sq"></span>Rótulos considerados</span><span class="mono muted" style="font-size:10.5px;font-weight:500" id="labcount"></span></div>
+    <div class="pb" style="display:flex;flex-direction:column;gap:14px">
+      <div class="ctl"><div class="seg" id="scope"><button type="button" aria-pressed="true" data-v="24">24 canônicos PT-BR</button><button type="button" aria-pressed="false" data-v="all">Todos os 71</button></div>
+        <p class="muted" style="font-size:13px">O conjunto canônico é o mesmo usado na comparação com os modelos GLiNER. Os 47 extras cobrem passaporte, IP, SWIFT, placa, credenciais.</p></div>
+      <div class="ctl"><label class="tog"><input type="checkbox" id="overlap" aria-label="Descartar spans sobrepostos do mesmo rótulo"><span>Descartar spans sobrepostos do mesmo rótulo</span></label></div>
+      <div id="labels" style="display:flex;flex-direction:column;gap:14px;border-top:1px solid var(--faint);padding-top:14px"></div>
+    </div>
+  </div>
+  <div class="panel rise d3">
+    <div class="ph"><span class="sec-label"><span class="sq"></span>Placeholders</span></div>
+    <div class="pb"><p style="font-size:13.5px;color:var(--ink-body)">Cada span recebe um placeholder numerado e estável — <span class="code">[CPF_1]</span>, <span class="code">[NOME_2]</span> — para que a mesma pessoa continue rastreável no documento redigido sem expor o dado.</p></div>
+  </div>
+</aside>
+</main>
+
+<section id="perf" class="wrap perf">
+  <div><p class="sec-label"><span class="sq"></span>Desempenho</p><h2>Ranking apples-to-apples contra os GLiNER.</h2>
+    <p>Mesma validação PT-BR de 5 mil amostras, mesmos 24 labels canônicos, nervaluate. O OPF lidera em F1 parcial; o mmBERT-small ainda vence em fronteiras exatas.</p></div>
+  <div class="panel"><table class="tbl"><thead><tr><th>Modelo</th><th>F1 partial</th><th>F1 exact</th></tr></thead><tbody>
+    <tr><td><b>opf-finetune</b> · este</td><td class="num hi">0.897</td><td class="num">0.853</td></tr>
+    <tr><td>mmBERT-small × 3</td><td class="num">0.888</td><td class="num hi">0.870</td></tr>
+    <tr><td>ettin-68m</td><td class="num">0.822</td><td class="num">0.789</td></tr>
+    <tr><td>ettin-32m</td><td class="num">0.808</td><td class="num">0.769</td></tr></tbody></table></div>
+</section>
+<section id="recipe" class="wrap perf" style="padding-top:0">
+  <div><p class="sec-label"><span class="sq"></span>Recipe</p><h2>O que mudou em relação ao GLiNER.</h2>
+    <p>Vocabulário de 71 labels em vez de 24. Inferência por Viterbi com restrições BIESO em vez de argmax por token. Placeholder emitido junto do rótulo. Sem o easter egg <span class="code">berco-de-tiradentes</span> — para isso, use a demo mmBERT.</p>
+    <div style="display:flex;flex-direction:column;gap:8px;margin-top:18px;max-width:360px"><a class="btn" href="https://huggingface.co/arthrod/gliner-opf-ptbr-pii-v1" rel="noopener" target="_blank" style="justify-content:space-between">arthrod/gliner-opf-ptbr-pii-v1 <span>→</span></a><a class="btn" href="https://huggingface.co/arthrod" rel="noopener" target="_blank" style="justify-content:space-between">Modelos e demos no Hugging Face <span>→</span></a></div></div>
+  <div class="panel"><dl class="kv" style="padding:18px 20px">
+    <dt>Backbone</dt><dd>openai/privacy-filter · 8L sparse-MoE · 128 experts · top-4</dd>
+    <dt>Treino</dt><dd>9 rodadas (3 ép × 3 saves) · 914 mil linhas · ~3h45 em MI300X</dd>
+    <dt>Decoder</dt><dd>Viterbi constrained · BIESO</dd>
+    <dt>Best ckpt</dt><dd><span class="code">e3_c3</span> · typed F1 0.885 · P 0.894 / R 0.876</dd>
+    <dt>Batch</dt><dd>32 janelas × grad-accum 4 · n-ctx 256 · bf16</dd>
+    <dt>Optimizer</dt><dd>AdamW · lr 1e-5 · wd 0.01 · clip 1.0</dd></dl></div>
+</section>
+
+<section class="cta"><div class="wrap">
+  <p class="sec-label"><span class="sq"></span>/ Consultoria</p>
+  <h2>Anonimização que passa por um DPO, não só por um benchmark.</h2>
+  <p>Desenho e implemento pipelines de redação e governança de dados pessoais — do modelo à política de retenção que o sustenta.</p>
+  <div style="display:flex;gap:12px;flex-wrap:wrap"><a class="btn btn-primary" href="https://www.linkedin.com/in/arthrod" rel="noopener" target="_blank">Falar comigo <span class="arr">→</span></a><a class="btn" href="https://github.com/arthrod" rel="noopener" target="_blank">Ver projetos →</a></div>
+</div></section>
+<footer><div class="wrap">
+  <div class="foot-top"><span class="c">© MMXXVI · Arthur Souza Rodrigues · New York · São Paulo</span><div class="foot-social"><a href="https://huggingface.co/arthrod" rel="noopener" target="_blank">HF</a><a href="https://github.com/arthrod" rel="noopener" target="_blank">GH</a><a href="https://www.linkedin.com/in/arthrod" rel="noopener" target="_blank">LI</a></div></div>
+  <p class="disclaimer"><strong>Attorney advertising.</strong> Esta página tem finalidade informativa e não constitui aconselhamento jurídico nem cria relação advogado-cliente. Os exemplos são fictícios e construídos manualmente; não contêm dados de pessoas reais. O modelo é fornecido como está, sem garantia de completude na identificação de dados pessoais.</p>
+</div></footer>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="/assets/demos/opf-app.js" defer></script>
+</body>
+</html>

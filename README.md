@@ -4,7 +4,7 @@ emoji: 🛡️
 colorFrom: blue
 colorTo: red
 sdk: gradio
-sdk_version: 5.40.0
+sdk_version: 6.13.0
 app_file: app.py
 pinned: false
 short_description: PII em PT-BR — openai/privacy-filter fine-tune
@@ -18,11 +18,70 @@ datasets:
 
 # OPF PT-BR PII Detector
 
-Finds personal and LGPD-sensitive data in Brazilian Portuguese text. It runs a fine-tune of OpenAI
-Privacy Filter (not a GLiNER model, despite the repo name), trained and evaluated on synthetic data;
-the benchmark and its limitations are in [the dataset card](https://huggingface.co/datasets/arthrod/gliner-opf-ptbr-pii-bench-v1).
+> **Redesenho (este repositório).** O front-end Gradio foi substituído pelo design
+> do design-system Arthur Souza Rodrigues (`OPF PT-BR PII - Demo.html`), agora
+> servido por uma API FastAPI que chama o runtime OPF real. Nada é simulado:
+> todo span exibido vem de `arthrod/gliner-opf-ptbr-pii-v1`.
+>
+> - `app.py` — servidor (FastAPI + host Gradio, compatível com ZeroGPU).
+> - `opf_service.py` — taxonomia, categorias, placeholders e pós-processamento
+>   dos spans (sem dependência de ML, testável sem GPU).
+> - `opf_examples.py` — catálogo de exemplos (6 do design + 21 do app original).
+> - `static/` — frontend do design (`index.html`, CSS, fontes, `demos/opf-app.js`).
+> - `tests/` — suíte pytest (18 testes) com runtime falso.
 
-Fine-tune do [openai/privacy-filter](https://github.com/openai/privacy-filter) treinado em **914 mil amostras** de PII em português brasileiro (texto natural autêntico das fontes upstream). 73 labels (24 PT-BR canônicos + 47 cross-source multilíngua).
+## Arquitetura e deployment
+
+O Space usa Gradio Server para servir a interface e enfileirar inferências em ZeroGPU. O modelo é carregado no processo do Space e a inferência usa `spaces.GPU`.
+
+| Rota | Função |
+|---|---|
+| `/` e `/assets/*` | Interface, estilos e fontes |
+| `/api/meta` | Rótulos, categorias e exemplos |
+| `/gradio_api/call/analyze` | Análise enfileirada e resultado via eventos |
+| `/api/health` | Estado de carregamento do modelo |
+
+Cada análise recebe o texto, os rótulos e a opção de sobreposição. O aplicativo não mantém um cache de textos enviados. Como na interface original, uma seleção vazia desativa o filtro e considera todos os rótulos.
+
+### O que mudou em relação ao design original
+
+1. **Sem anotações fictícias.** O `demos/pii-data.js` (mock offline com spans
+   escritos à mão) foi removido; os spans vêm do modelo.
+2. **Contagem de rótulos correta.** O checkpoint tem 71 rótulos PII; as "73
+   classes" do label space incluem `O` (background) e o easter egg
+   `berco_de_tiradentes`. A UI mostra "71" e deriva o número do catálogo.
+3. **Taxonomia completa.** As 12 categorias do design cobriam 59 rótulos; agora
+   as 9 categorias cobrem os 71 (o resto do app original foi preservado).
+4. **Overlap funcional.** O toggle "descartar spans sobrepostos do mesmo
+   rótulo" passou a ter efeito real (como em `opf`), em vez de ser decorativo.
+5. **Placeholders numerados** (`[CPF_1]`, `[NOME_2]`) mantidos do design; o
+   placeholder bruto do modelo (`<CPF_DOCUMENT_NUMBER>`) vem no payload.
+6. **Exemplos preservados.** Os 6 exemplos do design (ids `whats`, `peticao`,
+   `prontuario`, `cv`, `ticket`, `daiana` — deep links `?ex=` intactos) e os 21
+   do app original, com o filtro de rótulos por exemplo.
+7. **Acessibilidade e responsividade.** `aria-pressed`/`aria-label` nos chips,
+   `role="status"` no toast, `aria-live` no resultado, `aria-busy` durante a
+   análise, skip link, `:focus-visible`, `prefers-reduced-motion`, tabelas com
+   scroll horizontal no mobile.
+8. **Links reais.** CTA, rodapé e nav apontam para HF/GitHub/LinkedIn em vez
+   de `#`.
+
+### Execução local
+
+```bash
+pip install -r requirements.txt
+python app.py            # http://localhost:7860
+pytest -q                # 18 testes, sem GPU (runtime falso)
+```
+
+Variáveis: `OPF_DEVICE=cuda|cpu`, `OPF_EAGER_LOAD=0` (não baixa o modelo),
+`HF_TOKEN`.
+
+### Privacidade e limitações
+
+O texto enviado é processado pelo Space hospedado. Não envie dados confidenciais ou pessoais reais sem avaliar a infraestrutura, os controles de acesso e as políticas aplicáveis. A detecção pode produzir falsos positivos e deixar dados passar; revise o resultado antes de compartilhar ou usar para redação. As métricas dependem dos conjuntos de avaliação e não garantem desempenho em outros domínios.
+
+---
 
 ## Recipe
 
@@ -57,20 +116,3 @@ Dados completos no [model card](https://huggingface.co/arthrod/gliner-opf-ptbr-p
 | **arthrod/gliner-opf-ptbr-pii-demo** (this repo) | space | Gradio demo running the Privacy Filter fine-tune. |
 | `arthrod/gliner_eval_folder` (private) | dataset | Earlier (Feb 2026) sweep: 18 GLiNER models x 9 eval sets. |
 | [arthrod/gliner_review_comparison](https://huggingface.co/datasets/arthrod/gliner_review_comparison) | dataset | Earlier GLiNER PII review/comparison data. |
-
-## Run locally
-
-A compatible CUDA GPU, Python and access to the model are required. The Space uses `spaces.GPU`, downloads the model at startup and initializes the OPF runtime on CUDA; execution outside ZeroGPU may require changes to the GPU environment.
-
-```sh
-git clone https://github.com/jandira-tech/gliner-opf-ptbr-pii-demo.git
-cd gliner-opf-ptbr-pii-demo
-pip install -r requirements.txt
-python app.py
-```
-
-Enter text, select the labels to consider, and select **Analisar texto**. An empty label selection means all available labels. The current overlap checkbox is reported in the summary; overlapping spans cannot all be painted in Gradio's highlighted-text component. The model and dataset cards describe the evaluation and its limits.
-
-## Privacy and responsible use
-
-Text entered into the demo is processed by the hosted Space and model. Avoid confidential or real personal data unless you have assessed the infrastructure, access controls and applicable policies. Detection is imperfect: false negatives and incorrect labels are possible. Review results before using them for redaction or other decisions; benchmark scores do not guarantee performance on other text.
