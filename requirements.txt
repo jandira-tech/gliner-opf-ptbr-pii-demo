@@ -1,4 +1,4 @@
-gradio==6.13.0
+gradio==6.31.0
 fastapi>=0.110
 uvicorn>=0.29
 opf @ git+https://github.com/openai/privacy-filter.git

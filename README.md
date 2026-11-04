@@ -4,7 +4,7 @@ emoji: 🛡️
 colorFrom: blue
 colorTo: red
 sdk: gradio
-sdk_version: 6.13.0
+sdk_version: 6.31.0
 app_file: app.py
 pinned: false
 short_description: PII em PT-BR — openai/privacy-filter fine-tune
