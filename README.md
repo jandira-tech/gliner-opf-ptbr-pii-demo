@@ -28,7 +28,7 @@ datasets:
 >   dos spans (sem dependência de ML, testável sem GPU).
 > - `opf_examples.py` — catálogo de exemplos (6 do design + 21 do app original).
 > - `static/` — frontend do design (`index.html`, CSS, fontes, `demos/opf-app.js`).
-> - `tests/` — suíte pytest (18 testes) com runtime falso.
+> - `tests/` — suíte pytest (20 testes) com runtime falso.
 
 ## Arquitetura e deployment
 
@@ -71,7 +71,7 @@ Cada análise recebe o texto, os rótulos e a opção de sobreposição. O aplic
 ```bash
 pip install -r requirements.txt
 python app.py            # http://localhost:7860
-pytest -q                # 18 testes, sem GPU (runtime falso)
+pytest -q                # 20 testes, sem GPU (runtime falso)
 ```
 
 Variáveis: `OPF_DEVICE=cuda|cpu`, `OPF_EAGER_LOAD=0` (não baixa o modelo),
