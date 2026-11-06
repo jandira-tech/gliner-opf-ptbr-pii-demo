@@ -140,7 +140,7 @@ def api_meta() -> dict[str, Any]:
     return opf_service.catalog(EXAMPLES)
 
 
-def api_analyze(payload: AnalyzeRequest):
+def api_analyze(payload: AnalyzeRequest) -> JSONResponse | dict[str, Any]:
     text = payload.text or ""
     if not text.strip():
         return JSONResponse(
